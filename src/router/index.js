@@ -4,7 +4,7 @@ import Router from 'vue-router'
 // 路由懒加载
 const Home = () => import('views/home/Home')
 const Category = () => import('views/category/Category')
-const Cart = () => import('views/cart/cart')
+const Cart = () => import('views/cart/Cart')
 const Proflie = () => import('views/proflie/Proflie')
 
 
