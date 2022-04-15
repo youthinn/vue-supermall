@@ -4,6 +4,7 @@
     <home-swiper :banners="banners"></home-swiper>
     <recommend-view :recommends="recommends"></recommend-view>
     <featrue-view></featrue-view>
+    <tab-control :titles="['流行','新款','精选']"></tab-control>
     <ul>
       <li>李太白1</li>
       <li>李太白2</li>
@@ -111,6 +112,8 @@
 
 <script>
 import NavBar from "components/common/navbar/NavBar.vue";
+import TabControl from 'components/content/tabControl/TabControl.vue';
+
 import HomeSwiper from "./childComponents/HomeSwiper"
 import RecommendView from "./childComponents/RecommendView.vue"
 import FeatrueView from "./childComponents/FeatureView.vue"
@@ -122,7 +125,8 @@ export default {
     NavBar,
     HomeSwiper,
     RecommendView,
-    FeatrueView
+    FeatrueView,
+    TabControl
   },
 
   Swipername: "Home",
@@ -130,6 +134,11 @@ export default {
     return {
       banners: [],
       recommends: [],
+      goods:{
+        'pop':{page:0,list:[]},
+        'news':{page:0,list:[]},
+        'sell':{page:0,list:[]},
+      }
     };
   },
   created() {
@@ -158,5 +167,10 @@ export default {
   right: 0;
   top: 0;
   z-index: 9;
+}
+
+.tab-control {
+  position: sticky;
+  top: 44px;
 }
 </style>
