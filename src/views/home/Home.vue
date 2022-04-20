@@ -1,15 +1,18 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <recommend-view :recommends="recommends"></recommend-view>
-    <featrue-view></featrue-view>
-    <tab-control
-      class="tab-control"
-      :titles="['流行', '新款', '精选']"
-      @tabClick="tabClick"
-    ></tab-control>
-    <goods-list :goods="goods[curremtType].list"></goods-list>
+
+    <scroll class="content">
+      <home-swiper :banners="banners"></home-swiper>
+      <recommend-view :recommends="recommends"></recommend-view>
+      <featrue-view></featrue-view>
+      <tab-control
+        class="tab-control"
+        :titles="['流行', '新款', '精选']"
+        @tabClick="tabClick"
+      ></tab-control>
+      <goods-list :goods="showGoods"></goods-list>
+    </scroll>
   </div>
 </template>
 
@@ -17,6 +20,7 @@
 import NavBar from "components/common/navbar/NavBar.vue";
 import TabControl from "components/content/tabControl/TabControl.vue";
 import GoodsList from "components/content/goods/GoodsList.vue";
+import Scroll from 'components/common/scroll/Scroll'
 
 import HomeSwiper from "./childComponents/HomeSwiper";
 import RecommendView from "./childComponents/RecommendView.vue";
@@ -32,6 +36,7 @@ export default {
     FeatrueView,
     TabControl,
     GoodsList,
+    Scroll,
   },
 
   Swipername: "Home",
@@ -54,6 +59,11 @@ export default {
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+  },
+  computed: {
+    showGoods() {
+      return this.goods[this.curremtType].list;
+    },
   },
   methods: {
     /**
@@ -99,9 +109,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #home {
   padding-top: 44px;
+  height: 100vh;
+  position: relative;
 }
 
 .home-nav {
@@ -118,5 +130,15 @@ export default {
 .tab-control {
   position: sticky;
   top: 44px;
+}
+
+.content{
+  overflow: hidden;
+  /* 设置滚动的具体区域 */
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  left: 0;
+  right: 0;
 }
 </style>
