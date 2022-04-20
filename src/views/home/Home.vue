@@ -2,7 +2,14 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 
-    <scroll class="content">
+    <scroll
+      class="content"
+      ref="scroll"
+      :probeType="3"
+      @scroll="contentScroll"
+      :pull-up-load="true"
+      @pullingUp="loadMore"
+    >
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <featrue-view></featrue-view>
@@ -13,6 +20,8 @@
       ></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
+
+    <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
@@ -20,7 +29,8 @@
 import NavBar from "components/common/navbar/NavBar.vue";
 import TabControl from "components/content/tabControl/TabControl.vue";
 import GoodsList from "components/content/goods/GoodsList.vue";
-import Scroll from 'components/common/scroll/Scroll'
+import Scroll from "components/common/scroll/Scroll";
+import BackTop from "components/content/backTop/BackTop";
 
 import HomeSwiper from "./childComponents/HomeSwiper";
 import RecommendView from "./childComponents/RecommendView.vue";
@@ -37,9 +47,11 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
+    BackTop,
   },
 
-  Swipername: "Home",
+  // Swipername: "Home",
+  name: "Home",
   data() {
     return {
       banners: [],
@@ -50,6 +62,7 @@ export default {
         sell: { page: 0, list: [] },
       },
       curremtType: "pop",
+      isShowBackTop: false,
     };
   },
   created() {
@@ -82,6 +95,17 @@ export default {
           break;
       }
     },
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0, 500);
+    },
+    contentScroll(position) {
+      this.isShowBackTop = -position.y > 1000;
+    },
+    loadMore() {
+      this.getHomeGoods(this.curremtType);
+      console.log("加载更多");
+      this.$refs.scroll.scroll.refresh(); //对异步加载的图片进行刷新
+    },
 
     /**
      *网络请求相关的方法
@@ -103,6 +127,7 @@ export default {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
         // this.$refs.scroll.finishPullUp()
+        this.$refs.scroll.finishPullUp();
       });
     },
   },
@@ -132,7 +157,7 @@ export default {
   top: 44px;
 }
 
-.content{
+.content {
   overflow: hidden;
   /* 设置滚动的具体区域 */
   position: absolute;
@@ -141,4 +166,10 @@ export default {
   left: 0;
   right: 0;
 }
+
+/* .content {
+  height: calc(100%-93px);
+  overflow: hidden;
+  margin-top: 44px;
+} */
 </style>
