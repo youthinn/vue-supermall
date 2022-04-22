@@ -1,7 +1,13 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-
+    <tab-control
+        :titles="['流行', '新款', '精选']"
+        @tabClick="tabClick"
+        ref="TabControl1"
+        class="tab-control-fixed"
+        v-show="isTabFixed"
+      ></tab-control>
     <scroll
       class="content"
       ref="scroll"
@@ -10,13 +16,16 @@
       :pull-up-load="true"
       @pullingUp="loadMore"
     >
-      <home-swiper :banners="banners"></home-swiper>
+      <home-swiper
+        :banners="banners"
+        @swiperImageLoad="swiperImageLoad"
+      ></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <featrue-view></featrue-view>
       <tab-control
-        class="tab-control"
         :titles="['流行', '新款', '精选']"
         @tabClick="tabClick"
+        ref="TabControl2"
       ></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
@@ -37,6 +46,7 @@ import RecommendView from "./childComponents/RecommendView.vue";
 import FeatrueView from "./childComponents/FeatureView.vue";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
+import { debouce } from "common/utils";
 
 export default {
   components: {
@@ -50,7 +60,6 @@ export default {
     BackTop,
   },
 
-  // Swipername: "Home",
   name: "Home",
   data() {
     return {
@@ -63,15 +72,26 @@ export default {
       },
       curremtType: "pop",
       isShowBackTop: false,
+      tabOffsetTop:0,
+      isTabFixed:false
     };
   },
   created() {
     // 1.请求多个数据  这里使用的是下面methods定义的方法
     this.getHomeMultidata();
+
     // 2.请求商品数据  这里使用的是下面methods定义的方法
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+  },
+  mounted() {
+    // 1.监听itemf图片加载完成
+    const refresh = debouce(this.$refs.scroll.refresh, 50);
+    this.$bus.$on("itemImageLoad", () => {
+      // this.$refs.scroll.refresh();  使用这个监听，次数太多
+      refresh();
+    });
   },
   computed: {
     showGoods() {
@@ -82,6 +102,7 @@ export default {
     /**
      * 事件监听相关的方法
      */
+
     tabClick(index) {
       switch (index) {
         case 0:
@@ -94,17 +115,28 @@ export default {
           this.curremtType = "sell";
           break;
       }
+      this.$refs.TabControl1.currentIndex = index
+      this.$refs.TabControl2.currentIndex = index
     },
     backClick() {
       this.$refs.scroll.scrollTo(0, 0, 500);
     },
     contentScroll(position) {
+      // 1.判断BackTop是否显示
       this.isShowBackTop = -position.y > 1000;
+
+      // 2.决定tabControl是否吸顶(position:fixed)
+      this.isTabFixed = (-position.y) > this.tabOffsetTop
     },
     loadMore() {
       this.getHomeGoods(this.curremtType);
       console.log("加载更多");
       this.$refs.scroll.scroll.refresh(); //对异步加载的图片进行刷新
+    },
+    swiperImageLoad() {
+      // 2.获取tabControl的offsetTop
+      // 所有的组件都有一个属性$el:用于获取组件中的元素
+      this.tabOffsetTop = this.$refs.TabControl2.$el.offsetTop
     },
 
     /**
@@ -126,7 +158,7 @@ export default {
       getHomeGoods(type, page).then((res) => {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
-        // this.$refs.scroll.finishPullUp()
+        // 完成上拉加载更多
         this.$refs.scroll.finishPullUp();
       });
     },
@@ -136,7 +168,7 @@ export default {
 
 <style scoped>
 #home {
-  padding-top: 44px;
+  /* padding-top: 44px; */
   height: 100vh;
   position: relative;
 }
@@ -145,16 +177,12 @@ export default {
   background-color: var(--color-tint);
   color: #fff;
 
-  position: fixed;
+  /* 原生浏览器滚动才这么设置 */
+  /* position: fixed;
   left: 0;
   right: 0;
   top: 0;
-  z-index: 9;
-}
-
-.tab-control {
-  position: sticky;
-  top: 44px;
+  z-index: 9; */
 }
 
 .content {
@@ -172,4 +200,9 @@ export default {
   overflow: hidden;
   margin-top: 44px;
 } */
+
+.tab-control-fixed{
+  position: relative;
+  z-index: 9;
+}
 </style>
