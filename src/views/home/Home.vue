@@ -73,7 +73,8 @@ export default {
       curremtType: "pop",
       isShowBackTop: false,
       tabOffsetTop:0,
-      isTabFixed:false
+      isTabFixed:false,
+      saveY:0
     };
   },
   created() {
@@ -84,6 +85,13 @@ export default {
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+  },
+  activated() {
+    this.$refs.scroll.scrollTo(0,this.saveY,0)
+    this.$refs.scroll.refresh()
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.getScrollY();
   },
   mounted() {
     // 1.监听itemf图片加载完成

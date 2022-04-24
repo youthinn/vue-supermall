@@ -57,8 +57,11 @@ export default {
     },
     refresh() {
       this.scroll && this.scroll.refresh();
-      console.log("防抖动执行次数");
+      // console.log("防抖动执行次数");
     },
+    getScrollY() {
+      return this.scroll ? this.scroll.y : 0
+    }
   },
 };
 </script>

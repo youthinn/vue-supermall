@@ -6,6 +6,7 @@ const Home = () => import('views/home/Home')
 const Category = () => import('views/category/Category')
 const Cart = () => import('views/cart/Cart')
 const Proflie = () => import('views/proflie/Proflie')
+const Detail = () => import('views/detail/Detail')
 
 
 // 1.安装插件
@@ -31,6 +32,10 @@ const routes = [
   {
     path:'/proflie',
     component:Proflie
+  },
+  {
+    path:'/detail/:iid',
+    component:Detail
   }
 ]
 
