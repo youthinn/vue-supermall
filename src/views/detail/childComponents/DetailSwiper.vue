@@ -19,6 +19,11 @@ export default {
       }
     }
   },
+  data() {
+    return {
+
+    }
+  },
   components:{
     Swiper,
     SwiperItem
