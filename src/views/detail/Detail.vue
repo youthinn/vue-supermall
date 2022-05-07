@@ -6,9 +6,9 @@
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"></detail-goods-info>
-      <detail-param-info :param-info="paramsInfo"></detail-param-info>
-      <detail-comment-info :comment-info="commentInfo"></detail-comment-info>
-      <goods-list :goods="recommends"></goods-list>
+      <detail-param-info ref="params" :param-info="paramsInfo"></detail-param-info>
+      <detail-comment-info ref="comment" :comment-info="commentInfo"></detail-comment-info>
+      <goods-list ref="recommend" :goods="recommends"></goods-list>
     </scroll>
   </div>
 </template>
@@ -53,6 +53,7 @@ export default {
       commentInfo: {},
       recommends: [],
       itemImgListener: null,
+      themTypeYs:[]
     };
   },
   mixins:[itemListenerMixin],
@@ -106,8 +107,8 @@ export default {
       this.$refs.scroll.refresh();
     },
     titleClick(index) {
-    console.log("🚀 ~ file: Detail.vue ~ line 109 ~ titleClick ~ index", index)
-
+    // console.log("🚀 ~ file: Detail.vue ~ line 109 ~ titleClick ~ index", index)
+    this.$refs.scroll.scrollTo(0,-this.themTypeYs[index],200)
     }
   },
 };
