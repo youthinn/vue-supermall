@@ -35,7 +35,9 @@ export default {
   },
   methods: {
     titleClick(index) {
-      this.currentIndex = index
+      this.currentIndex = index;
+      //把详情页的点击传出去
+      this.$emit('titleClick',index)
     },
     backClick() {
       console.log()

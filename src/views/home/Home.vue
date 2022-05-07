@@ -1,32 +1,16 @@
 <template>
   <div id="home">
-    <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <tab-control
-        :titles="['流行', '新款', '精选']"
-        @tabClick="tabClick"
-        ref="TabControl1"
-        class="tab-control-fixed"
-        v-show="isTabFixed"
-      ></tab-control>
-    <scroll
-      class="content"
-      ref="scroll"
-      :probeType="3"
-      @scroll="contentScroll"
-      :pull-up-load="true"
-      @pullingUp="loadMore"
-    >
-      <home-swiper
-        :banners="banners"
-        @swiperImageLoad="swiperImageLoad"
-      ></home-swiper>
+    <nav-bar class="home-nav">
+      <div slot="center">购物街</div>
+    </nav-bar>
+    <tab-control :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="TabControl1" class="tab-control-fixed"
+      v-show="isTabFixed"></tab-control>
+    <scroll class="content" ref="scroll" :probeType="3" @scroll="contentScroll" :pull-up-load="true"
+      @pullingUp="loadMore">
+      <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <featrue-view></featrue-view>
-      <tab-control
-        :titles="['流行', '新款', '精选']"
-        @tabClick="tabClick"
-        ref="TabControl2"
-      ></tab-control>
+      <tab-control :titles="['流行', '新款', '精选']" @tabClick="tabClick" ref="TabControl2"></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
 
@@ -47,6 +31,7 @@ import FeatrueView from "./childComponents/FeatureView.vue";
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
 import { debouce } from "common/utils";
+import {itemListenerMixin} from "common/mixin"
 
 export default {
   components: {
@@ -59,7 +44,6 @@ export default {
     Scroll,
     BackTop,
   },
-
   name: "Home",
   data() {
     return {
@@ -72,11 +56,12 @@ export default {
       },
       curremtType: "pop",
       isShowBackTop: false,
-      tabOffsetTop:0,
-      isTabFixed:false,
-      saveY:0
+      tabOffsetTop: 0,
+      isTabFixed: false,
+      saveY: 0,
     };
   },
+  mixins:[itemListenerMixin],
   created() {
     // 1.请求多个数据  这里使用的是下面methods定义的方法
     this.getHomeMultidata();
@@ -87,19 +72,17 @@ export default {
     this.getHomeGoods("sell");
   },
   activated() {
-    this.$refs.scroll.scrollTo(0,this.saveY,0)
+    this.$refs.scroll.scrollTo(0, this.saveY, 0)
     this.$refs.scroll.refresh()
   },
   deactivated() {
+    // 1.保存Y值
     this.saveY = this.$refs.scroll.getScrollY();
+
+    // 2.取消全局事件的监听
+    this.$bus.$off('itemImgLoad', this.itemImgListener)
   },
   mounted() {
-    // 1.监听itemf图片加载完成
-    const refresh = debouce(this.$refs.scroll.refresh, 50);
-    this.$bus.$on("itemImageLoad", () => {
-      // this.$refs.scroll.refresh();  使用这个监听，次数太多
-      refresh();
-    });
   },
   computed: {
     showGoods() {
@@ -123,6 +106,7 @@ export default {
           this.curremtType = "sell";
           break;
       }
+      //让两个tabControl的currentIndex保持
       this.$refs.TabControl1.currentIndex = index
       this.$refs.TabControl2.currentIndex = index
     },
@@ -209,7 +193,7 @@ export default {
   margin-top: 44px;
 } */
 
-.tab-control-fixed{
+.tab-control-fixed {
   position: relative;
   z-index: 9;
 }
