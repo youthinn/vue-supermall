@@ -1,16 +1,16 @@
-module.exports = {
-  transpileDependencies: true,
-  // 配置文件别名
+module.exports ={
   configureWebpack: {
-    resolve: {
-      alias: {
-        // 'scr':'@' vue cli3已经默认配置了这个
-        'assets': '@/assets',
-        'common': '@/common',
-        'components': '@/components',
-        'network': '@/network',
-        'views': '@/views'
+      resolve: {
+          alias: {
+              // 默认已经有@对应src
+              // '@': 'src',
+              'assets': '@/assets',
+              'common': '@/common',
+              'components': '@/components',
+              'network': '@/network',
+              'views': '@/views',
+
+          }
       }
-    }
   }
 }

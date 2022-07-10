@@ -1,5 +1,6 @@
 import { request } from "./request";
 
+//请求商品详情页数据
 export function getDetail(iid) {
   return request({
     url: '/detail',
@@ -9,7 +10,7 @@ export function getDetail(iid) {
   })
 }
 
-
+//请求推荐数据
 export function getRecommend() {
   return request({
     url:'/recommend'

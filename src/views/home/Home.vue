@@ -122,7 +122,7 @@ export default {
     },
     loadMore() {
       this.getHomeGoods(this.curremtType);
-      console.log("加载更多");
+      // console.log("加载更多");
       this.$refs.scroll.scroll.refresh(); //对异步加载的图片进行刷新
     },
     swiperImageLoad() {
