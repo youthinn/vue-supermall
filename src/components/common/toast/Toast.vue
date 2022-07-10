@@ -47,7 +47,7 @@ export default {
      transform: translate(-50%, -50%);
      padding: 8px 10px;
 
-     z-index: 99;
+     z-index: 99999999;
 
      background-color: rgba(0, 0, 0, .75);
      color: #fff;

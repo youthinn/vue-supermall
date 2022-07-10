@@ -250,8 +250,7 @@ export default {
 
 .content {
   background-color: #fff;
-  z-index: 6;
-
+  overflow: hidden;
   height: calc(100% - 44px - 49px);
 }
 </style>
