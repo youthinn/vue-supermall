@@ -3,6 +3,8 @@ import {
   ADD_TO_CART
 } from './mutations_types'
 
+import { getCategoryContent,getCategoryTitle } from '@/network/category'
+
 export default {
   addCart(context, payload) {
     return new Promise((resolve, reject) => {
@@ -22,5 +24,24 @@ export default {
       resolve('加入购物车成功')
     }
     })
+  },
+  // 获取分类标题
+  getTitle(context) {
+    getCategoryTitle().then(res => {
+      context.state.categoryTitle = res.data.category.list
+      // console.log(context.state.categoryTitle)
+    })
+  },
+  // 获取分类内容
+  getContent(context,stateMaitKey=3627) {
+    getCategoryContent(stateMaitKey).then(res => {
+      context.state.categoryContent = res.data.list
+      context.state.maitKey = stateMaitKey
+      context.state.newMaitKey = res.key
+      // console.log(context.state.maitKey)
+      console.log(res)
+      // console.log(context.state.newMaitKey)
+    })
   }
+
 }

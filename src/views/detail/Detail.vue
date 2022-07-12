@@ -240,7 +240,6 @@ export default {
   height: 100vh;
 }
 
-#detail img {}
 
 .detail-nav {
   position: relative;

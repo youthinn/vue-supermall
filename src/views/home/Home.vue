@@ -168,6 +168,7 @@ export default {
 .home-nav {
   background-color: var(--color-tint);
   color: #fff;
+  font-weight: 700;
 
   /* 原生浏览器滚动才这么设置 */
   /* position: fixed;
