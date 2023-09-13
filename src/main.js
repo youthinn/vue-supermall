@@ -8,6 +8,9 @@ import VueLazyLoad from 'vue-lazyload'
 
 import toast from 'components/common/toast'
 
+import Vant from 'vant';
+import 'vant/lib/index.css';
+
 Vue.config.productionTip = false;
 
 //创建一个事件总线
@@ -18,12 +21,15 @@ Vue.prototype.$bus = new Vue()
 //安装toast插件
 Vue.use(toast)
 
+Vue.use(Vant);
+
+
 // 解决移动端300ms延迟
 FastClick.attach(document.body)
 
 // 使用懒加载图片插件
-Vue.use(VueLazyLoad,{
-  loading:require('./assets/img/common/imgload.jpg')
+Vue.use(VueLazyLoad, {
+  loading: require('./assets/img/common/imgload.jpg')
 })
 
 new Vue({

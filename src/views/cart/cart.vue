@@ -4,7 +4,7 @@
     <nav-bar class="nav-bar">
       <div slot="center">购物车({{ length }})</div>
     </nav-bar>
-    
+
     <!-- 商品列表 -->
     <cart-list />
 
@@ -15,8 +15,8 @@
 <script>
 import NavBar from "components/common/navbar/NavBar";
 
-import CartList from './childComponents/CartList.vue';
-import CartBottonBar from './childComponents/CartBottonBar.vue'
+import CartList from "./childComponents/CartList.vue";
+import CartBottonBar from "./childComponents/CartBottonBar.vue";
 import { mapGetters } from "vuex";
 
 export default {
@@ -44,7 +44,7 @@ export default {
 .nav-bar {
   background-color: var(--color-tint);
   color: #fff;
-  
-  font-weight: 700; 
+
+  font-weight: 700;
 }
 </style>

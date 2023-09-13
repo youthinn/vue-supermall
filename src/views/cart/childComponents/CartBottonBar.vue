@@ -1,62 +1,86 @@
 <template>
   <div class="bottom-bar">
     <div class="check-content">
-      <checkButton :is-checked="isSelectAll" class="check-button" @click.native="checkClick" />
+      <checkButton
+        :is-checked="isSelectAll"
+        class="check-button"
+        @click.native="checkClick"
+      />
       <span>全选</span>
     </div>
-    <div class="price">
-      合计：{{ totalPrice }}
-    </div>
-    <div class="calculate" @click="calcClick">
-      去结算({{ checkLength }})
-    </div>
+    <div class="price">合计：{{ totalPrice }}</div>
+    <div class="calculate" @click="calcClick">去结算({{ checkLength }})</div>
   </div>
 </template>
 <script>
-import checkButton from 'components/content/checkButton/CheckButton'
-import { mapGetters } from 'vuex'
+import checkButton from "components/content/checkButton/CheckButton";
+import { mapGetters } from "vuex";
 export default {
   name: "CartBottomBar",
   components: {
-    checkButton
+    checkButton,
   },
   methods: {
     checkClick() {
       if (this.isSelectAll) {
-        this.cartList.forEach(item => item.checked = false)
+        this.cartList.forEach((item) => (item.checked = false));
       } else {
-        this.cartList.forEach(item => item.checked = true)
+        this.cartList.forEach((item) => (item.checked = true));
       }
     },
-    calcClick() {
+    async calcClick() {
       if (!this.isSelectAll) {
-        this.$toast.show('请选择购买的商品', 2000)
+        return this.$toast.show("请选择购买的商品", 2000);
       }
-    }
+      // return;
+      this.$router.push({
+        name: "orderform",
+      });
+    },
   },
   computed: {
-    ...mapGetters(['cartList']),
+    ...mapGetters(["cartList"]),
     totalPrice() {
-      return '￥' + this.cartList.filter(item => {
-        return item.checked
-      }).reduce((preValue, item) => {
-        return preValue + item.price * item.count
-      }, 0).toFixed(2)
+      return (
+        "￥" +
+        this.cartList
+          .filter((item) => {
+            return item.checked;
+          })
+          .reduce((preValue, item) => {
+            return preValue + item.price * item.count;
+          }, 0)
+          .toFixed(2)
+      );
     },
+
     checkLength() {
-      return this.cartList.filter(item => item.checked).length
+      return this.cartList.filter((item) => item.checked).length;
     },
     isSelectAll() {
-      if (this.cartList.length === 0) return false
+      if (this.cartList.length === 0) return false;
       //   return !(this.cartList.filter(item => !item.checked).length)
-      return !this.cartList.find(item => !item.checked)
-    }
+      return !this.cartList.find((item) => !item.checked);
+    },
+  },
+  watch: {
+    totalPrice(newVal, oldVal) {
+      this.$store.state.totalPrice = this.cartList
+        .filter((item) => {
+          return item.checked;
+        })
+        .reduce((preValue, item) => {
+          return preValue + item.price * item.count;
+        }, 0);
+      console.log(newVal, this.$store.state.totalPrice);
+    },
   },
   data() {
     return {
+      price: 0,
     };
-  }
-}
+  },
+};
 </script>
 <style scoped>
 .bottom-bar {
@@ -67,7 +91,6 @@ export default {
 
   background-color: #eee;
   font-size: 14px;
-
 }
 
 .check-content {

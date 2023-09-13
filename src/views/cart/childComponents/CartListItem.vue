@@ -2,9 +2,12 @@
   <div id="shop-item">
     <div class="item-selector">
       <!-- <CheckButton :isChecked="itemInfo.checked" @click.native="checkClick"/> -->
-      <check-button :is-checked="itemInfo.checked" @click.native="checkClick"></check-button>
+      <check-button
+        :is-checked="itemInfo.checked"
+        @click.native="checkClick"
+      ></check-button>
     </div>
-    <div class="item-img">
+    <!-- <div class="item-img">
       <img :src="itemInfo.image" alt="商品图片" />
     </div>
     <div class="item-info">
@@ -14,36 +17,68 @@
         <div class="item-price left">¥{{ itemInfo.price }}</div>
         <div class="item-count right">x{{ itemInfo.count }}</div>
       </div>
-    </div>
+    </div> -->
+    <van-swipe-cell>
+      <van-card
+        :num="itemInfo.count"
+        :price="itemInfo.price"
+        :desc="itemInfo.desc"
+        :title="itemInfo.title"
+        class="goods-card"
+        :thumb="itemInfo.image"
+      />
+      <template #right>
+        <van-button square text="删除" type="danger" class="delete-button" />
+      </template>
+    </van-swipe-cell>
   </div>
 </template>
 
 <script>
-import CheckButton from 'components/content/checkButton/CheckButton.vue'
-
+import CheckButton from "components/content/checkButton/CheckButton.vue";
 
 export default {
-  name: 'CartListItem',
+  name: "CartListItem",
   props: {
     itemInfo: {
       type: Object,
       default() {
-        return {}
-      }
-    }
+        return {};
+      },
+    },
   },
   components: {
-    CheckButton
+    CheckButton,
   },
   methods: {
     checkClick() {
-      this.itemInfo.checked = !this.itemInfo.checked
-    }
+      this.itemInfo.checked = !this.itemInfo.checked;
+    },
   },
-}
+};
 </script>
 
 <style scoped>
+:deep(.van-image) {
+  padding: 0px;
+}
+:deep(.van-card) {
+  background: transparent;
+}
+
+:deep(.van-card__price) {
+  color: orangered;
+}
+
+.goods-card {
+  margin: 0;
+  background-color: @white;
+}
+
+.delete-button {
+  height: 100%;
+}
+
 #shop-item {
   width: 100%;
   display: flex;
@@ -53,7 +88,7 @@ export default {
 }
 
 .item-selector {
-  width: 14%;
+  min-width: 8%;
   display: flex;
   justify-content: center;
   align-items: center;
