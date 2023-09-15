@@ -20,13 +20,24 @@
     </div> -->
     <van-swipe-cell>
       <van-card
-        :num="itemInfo.count"
         :price="itemInfo.price"
         :desc="itemInfo.desc"
         :title="itemInfo.title"
         class="goods-card"
         :thumb="itemInfo.image"
-      />
+      >
+        <template #footer>
+          <button class="bth_add" @click="addCount">+</button>
+          <div class="goods_count">{{ itemInfo.count }}</div>
+          <button
+            class="bth_minus"
+            :disabled="itemInfo.count <= 1"
+            @click="minusCount"
+          >
+            -
+          </button>
+        </template>
+      </van-card>
       <template #right>
         <van-button square text="删除" type="danger" class="delete-button" />
       </template>
@@ -54,6 +65,13 @@ export default {
     checkClick() {
       this.itemInfo.checked = !this.itemInfo.checked;
     },
+    addCount() {
+      console.log("addCount");
+      this.itemInfo.count++;
+    },
+    minusCount() {
+      this.itemInfo.count--;
+    },
   },
 };
 </script>
@@ -68,6 +86,22 @@ export default {
 
 :deep(.van-card__price) {
   color: orangered;
+}
+
+:deep(.van-card__footer) {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+.goods_count {
+  margin: 0 8px;
+}
+
+.bth_add,
+.bth_minus {
+  width: 20px;
+  height: 20px;
 }
 
 .goods-card {

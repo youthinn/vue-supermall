@@ -25,7 +25,8 @@
         :desc="item.desc"
         :title="item.title"
         :thumb="item.image"
-      />
+      >
+      </van-card>
     </div>
     <!-- <div style="height: 110vh"></div> -->
   </div>

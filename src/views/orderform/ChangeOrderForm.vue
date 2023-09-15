@@ -63,8 +63,7 @@ export default {
     },
     changeAddressInfo(content) {
       // content.address = content.addressDetail;
-      let newAdderss = content.city + content.county + content.addressDetail;
-      content.address = newAdderss;
+
       this.$bus.$emit("changeAddressInfo", content);
 
       this.$router.push("/orderform");
